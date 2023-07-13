@@ -12,6 +12,11 @@ const data_reducer = (state, { type, payload }) => {
                 ...state,
                 events: payload
             }
+        case("FILTER"):
+            return {
+                ...state,
+                filters: payload
+            }
     }
 }
 
@@ -19,17 +24,22 @@ const data_reducer = (state, { type, payload }) => {
 export const DataProvider = ( {children} ) => {
     const a =4
     const initial_Data = {
-        events: []
+        events: [],
+        filters: {
+            search: "",
+            eventType: null
+        }
     }
     const [all_events, events_dispatch] = useReducer(data_reducer, initial_Data)
 
     useEffect(() => {
         events_dispatch({ type: "INITIAL", payload: meetups })
     }, [])
+
     console.log(all_events)
 
     return (
-        <DataContext.Provider value={{all_events}}>
+        <DataContext.Provider value={{all_events, events_dispatch}}>
             {children}
         </DataContext.Provider>
     )

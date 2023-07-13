@@ -1,5 +1,6 @@
 import { Box, Flex, Heading, Input } from "@chakra-ui/react"
 import { useData } from "../Contexts/DataContext"
+import { Link } from "react-router-dom"
 
 const Nav = () => {
     const {all_events, events_dispatch} = useData()
@@ -13,7 +14,7 @@ const Nav = () => {
     return(
         <Box paddingX={10}>
         <Flex paddingY={5} justify={"space-between"} borderBottom={"1px solid grey"}>
-        <div className="nav_font">Meetup</div>
+        <div className="nav_font"><Link to={"/"}>Meetup</Link></div>
         <Input w={"15rem"} type="text" placeholder="search by title" onChange={search_handler} />
         </Flex>
         </Box>

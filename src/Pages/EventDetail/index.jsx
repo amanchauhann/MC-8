@@ -3,7 +3,7 @@ import { useData } from "../../Contexts/DataContext"
 import { Avatar, Box, Button, Flex, Heading, Image, Text, useDisclosure } from "@chakra-ui/react"
 import { getDateAndTime } from "../../utils"
 import RSVPModal from "../../Components/RSVPModal"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 
 const EventDetail = () => {
     const {eventId} = useParams()
@@ -11,6 +11,17 @@ const EventDetail = () => {
     const [is_rsvp, set_is_rsvp] = useState(false)
     const this_event = all_events.events.filter(({id}) => id === eventId)[0]
     const {title,hostedBy,eventThumbnail,eventDescription,additionalInformation,eventTags, location, address, eventStartTime, eventEndTime, price, speakers, isPaid} = this_event
+
+    const [hasTimePassed, setHasTimePassed] = useState(false);
+  
+  useEffect(() => {
+    const targetTime = new Date(eventStartTime);
+    const currentTime = new Date();
+    
+    if (currentTime > targetTime) {
+      setHasTimePassed(true);
+    }
+  }, []);
 
     const { isOpen, onOpen, onClose } = useDisclosure()
 
@@ -72,7 +83,8 @@ const EventDetail = () => {
                 </Box>)}
             </Flex>
         </Box>
-        <Button alignSelf={"center"} w={"10rem"} colorScheme="red" isDisabled={is_rsvp} onClick={ onOpen}>{is_rsvp && "Already "}RSVP</Button>
+        {!hasTimePassed ? <Button alignSelf={"center"} w={"10rem"} colorScheme="red" isDisabled={is_rsvp} onClick={ onOpen}>{is_rsvp ? "Already RSVPed" : "RSVP" }</Button> : <Button alignSelf={"center"} w={"10rem"} colorScheme="red" isDisabled>Already Happend</Button>  }
+        
         </Flex>
         </Flex>
         <RSVPModal isOpen={isOpen} onClose={onClose} set_is_rsvp={set_is_rsvp} />
